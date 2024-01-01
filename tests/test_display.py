@@ -7,7 +7,7 @@ from src import fruits
 class DisplayFruit(unittest.TestCase):
     def test_print_fruits(self):
         fs = [
-            fruits.Apple(),
+            fruits.RedApple(),
             fruits.Banana(),
             fruits.Blueberry(),
             fruits.Kiwi()

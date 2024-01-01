@@ -1,12 +1,11 @@
 import sys
 
-from src import state
 from src import fruits
 
 
 class Console:
     @staticmethod
-    def __fetch_game_state(gs: state.GameState):
+    def __fetch_game_state(gs):
         max_size = -1
         for i in range(len(gs)):
             if len(gs[i]) > max_size:
@@ -20,11 +19,11 @@ class Console:
 
         return lines
 
-    def display_game_state(self, gs: state.GameState):
+    def display_game_state(self, gs):
         lines = self.__fetch_game_state(gs)
         content = "Cru.sh!\n"
         for l in lines:
-            content += "".join(l) + "\n"
+            content += " ".join(l) + "\n"
         
         sys.stdout.write("\r")
         sys.stdout.flush()

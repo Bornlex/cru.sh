@@ -14,16 +14,16 @@ class TestGravity(unittest.TestCase):
         Test the gravity mechanism with a full column.
         Nothing should change.
         """
-        a = fruits.Apple()
+        a = fruits.RedApple()
         b = fruits.Banana()
         k = fruits.Kiwi()
         s = [a, b, k]
         column = state.Column(size=s)
         column.gravity()
         self.assertTrue(column.full)
-        self.assertEquals(a, column[0])
-        self.assertEquals(b, column[1])
-        self.assertEquals(k, column[2])
+        self.assertEqual(a, column[0])
+        self.assertEqual(b, column[1])
+        self.assertEqual(k, column[2])
 
     def test_gravity_column_empty(self):
         """
@@ -35,5 +35,17 @@ class TestGravity(unittest.TestCase):
         column.gravity()
         self.assertTrue(column.full)
         for i in range(size):
-            self.assertTrue(isinstance(column[i], fruits.Fruit))
-    
+            self.assertTrue(column[i], fruits.Fruit)
+
+    def test_gravity_last_missing(self):
+        a = fruits.RedApple()
+        b = fruits.Banana()
+        k = fruits.Kiwi()
+        s = [a, b, k, fruits.Empty()]
+        column = state.Column(size=s)
+        column.gravity()
+        self.assertTrue(isinstance(column[0], fruits.Fruit))
+        self.assertEqual(column[1], a)
+        self.assertEqual(column[2], b)
+        self.assertEqual(column[3], k)
+        
