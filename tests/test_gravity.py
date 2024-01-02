@@ -4,7 +4,6 @@ from src import state
 from src import fruits
 
 
-
 class TestGravity(unittest.TestCase):
     def setUp(self):
         pass

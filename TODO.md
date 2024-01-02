@@ -1,5 +1,6 @@
 # Todo
 
 - [ ] When there are no combination, reset the state
-- [ ] Swap only to match
-- [ ] Check for more than 3 adjacent fruits
+- [x] Swap only to match
+- [x] Check for more than 3 adjacent fruits
+- [ ] Create super fruits

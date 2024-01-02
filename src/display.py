@@ -15,15 +15,15 @@ class Console:
 
         for col in range(len(gs)):
             for i in range(min(max_size, len(gs[col]))):
-                 lines[i][col] = gs[col][i].icon
+                lines[i][col] = gs[col][i].icon
 
         return lines
 
     def display_game_state(self, gs):
         lines = self.__fetch_game_state(gs)
-        content = "Cru.sh!\n"
-        for l in lines:
-            content += " ".join(l) + "\n"
+        content = ""
+        for line in lines:
+            content += " ".join(line) + "\n"
         
         sys.stdout.write("\r")
         sys.stdout.flush()

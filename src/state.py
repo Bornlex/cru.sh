@@ -6,7 +6,6 @@ from src import fruits
 from src import display
 
 
-
 class RandomGenerator:
     __allowed_fruits = [fruits.GreenApple, fruits.RedApple, fruits.Kiwi, fruits.Pineapple]
     __block = fruits.Block
@@ -99,12 +98,54 @@ class GameState:
         self.__columns = columns
         self.__console = console
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: int):
         assert 0 <= index < len(self.__columns)
         return self.__columns[index]
 
     def __len__(self):
         return len(self.__columns)
+
+    def __search_for_adjacent_fruits(
+            self, position: tuple[int, int],
+            k: int = 3,
+            state: list[Column] = None
+    ) -> list[tuple[int, int]]:
+        """
+        Searches for adjacent fruits that should be destroyed or transformed into a super fruit.
+
+        :param position: the position of the first fruit of the combination
+        :param k: the minimum number of adjacent fruits to look for
+        :param state: the state to look into (in case it is not the self state)
+        :return: the list of adjacent positions
+        """
+        col, row = position
+        results = []
+
+        state = state if state is not None else self
+
+        found = []
+        # search in line
+        for c in range(col, len(state)):
+            if isinstance(state[c][row], type(state[col][row])):
+                found.append((c, row))
+            else:
+                break
+
+        if len(found) >= k:
+            results += found
+
+        found = []
+        # search in column
+        for r in range(row, len(state[col])):
+            if isinstance(state[col][r], type(state[col][row])):
+                found.append((col, r))
+            else:
+                break
+
+        if len(found) >= k:
+            results += found
+
+        return results
 
     @staticmethod
     def compare_states(state1, state2):
@@ -116,7 +157,7 @@ class GameState:
                     return False
         return True
 
-    def swap(self, position1: tuple, position2: tuple):
+    def swap(self, position1: tuple[int, int], position2: tuple[int, int]):
         """
         Swaps two adjacent fruits.
 
@@ -133,8 +174,27 @@ class GameState:
         assert 0 <= row1 < len(self[col1])
         assert 0 <= row2 < len(self[col2])
         # Make sure the fruits are adjacent
-        assert (col1 == col2 and (row1 == row2 - 1 or row1 == row2 + 1)) or (row1 == row2 and (col1 == col2 - 1 or col1 == col2 + 1))
-        
+        assert (
+            (col1 == col2 and (row1 == row2 - 1 or row1 == row2 + 1)) or
+            (row1 == row2 and (col1 == col2 - 1 or col1 == col2 + 1))
+        )
+
+        # copy state and perform swap inside it to check if it connects fruits
+        virtual_state = copy.deepcopy(self.__columns)
+        tmp = virtual_state[col2][row2]
+        virtual_state[col2][row2] = virtual_state[col1][row1]
+        virtual_state[col1][row1] = tmp
+
+        virtual_found1 = self.__search_for_adjacent_fruits((col1, 0), state=virtual_state)
+        virtual_found2 = self.__search_for_adjacent_fruits((0, row1), state=virtual_state)
+        virtual_found3 = self.__search_for_adjacent_fruits((col2, 0), state=virtual_state)
+        virtual_found4 = self.__search_for_adjacent_fruits((0, row2), state=virtual_state)
+        virtual_found = virtual_found1 + virtual_found2 + virtual_found3 + virtual_found4
+        if len(virtual_found) == 0:
+            # the swap does not connect any fruit, so we do not perform it
+            return
+
+        # the proposed swap indeed connects fruits, so we perform it on the real state
         tmp = self[col2][row2]
         self[col2][row2] = self[col1][row1]
         self[col1][row1] = tmp
@@ -142,17 +202,17 @@ class GameState:
     def destroy(self):
         """
         Destroy similar aligned candies (at least 3).
+
+        TODO: pop super fruits in case of special patterns
         """
         to_set_empty = []
         for col in range(len(self)):
             for row in range(len(self[col])):
-                if row < len(self[col]) - 2 and type(self[col][row]) == type(self[col][row + 1]) == type(self[col][row + 2]):
-                    to_set_empty += [(col, row), (col, row + 1), (col, row + 2)]
-                if col < len(self) - 2 and type(self[col][row]) == type(self[col + 1][row]) == type(self[col + 2][row]):
-                    to_set_empty += [(col, row), (col + 1, row), (col + 2, row)]
+                adjacent_fruits = self.__search_for_adjacent_fruits((col, row))
+                to_set_empty += adjacent_fruits
+
         for col, row in to_set_empty:
             self[col][row] = fruits.Empty()
-                
 
     def gravity(self):
         """
@@ -163,6 +223,7 @@ class GameState:
 
     def loop(self):
         while True:
+            self.__console.display_game_state(self)
             previous_state = copy.deepcopy(self.__columns)
             self.gravity()
             self.destroy()

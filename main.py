@@ -10,12 +10,13 @@ if __name__ == '__main__':
         state.Column(4, rand_init=True),
     ]
     console = display.Console()
+    print("Cru.sh")
+    print("  Swap: col1, row1, col2, row2")
+
     gs = state.GameState(columns, console)
     gs.loop()
+
     while True:
-        print("Cru.sh")
-        print("  Swap: col1, row1, col2, row2")
-        console.display_game_state(gs)
         action = input("> ")
         
         if action == "exit":
