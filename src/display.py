@@ -4,6 +4,8 @@ from src import fruits
 
 
 class Console:
+    _separator = "--------\n"
+
     @staticmethod
     def __fetch_game_state(gs):
         max_size = -1
@@ -21,9 +23,10 @@ class Console:
 
     def display_game_state(self, gs):
         lines = self.__fetch_game_state(gs)
-        content = ""
+        content = self._separator
         for line in lines:
             content += " ".join(line) + "\n"
+        content += self._separator
         
         sys.stdout.write("\r")
         sys.stdout.flush()

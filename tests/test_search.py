@@ -18,7 +18,7 @@ class TestSearch(unittest.TestCase):
         ])
         gs = state.GameState([c1, c2, c3], console=display.Console())
         position = (0, 0)
-        found = gs._GameState__search_for_adjacent_fruits(position)
+        found = gs._GameState__search_for_adjacent_fruits(position, state=gs.columns)
         self.assertEqual(3, len(found))
         self.assertTrue(isinstance(found[0], tuple))
 
@@ -37,7 +37,7 @@ class TestSearch(unittest.TestCase):
         ])
         gs = state.GameState([c1, c2, c3, c4], console=display.Console())
         position = (0, 0)
-        found = gs._GameState__search_for_adjacent_fruits(position)
+        found = gs._GameState__search_for_adjacent_fruits(position, state=gs.columns)
         self.assertEqual(4, len(found))
 
     def test_search_adjacent_same_column(self):
@@ -52,7 +52,7 @@ class TestSearch(unittest.TestCase):
         ])
         gs = state.GameState([c1, c2, c3], console=display.Console())
         position = (1, 0)
-        found = gs._GameState__search_for_adjacent_fruits(position)
+        found = gs._GameState__search_for_adjacent_fruits(position, state=gs.columns)
         self.assertEqual(3, len(found))
 
     def test_search_adjacent_empty(self):
@@ -67,5 +67,5 @@ class TestSearch(unittest.TestCase):
         ])
         gs = state.GameState([c1, c2, c3], console=display.Console())
         position = (0, 0)
-        found = gs._GameState__search_for_adjacent_fruits(position)
+        found = gs._GameState__search_for_adjacent_fruits(position, state=gs.columns)
         self.assertEqual(0, len(found))

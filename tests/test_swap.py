@@ -26,14 +26,14 @@ class SwapTest(unittest.TestCase):
         position2 = (1, 1)
         candy1 = self.gs[position1[0]][position1[1]]
         candy2 = self.gs[position2[0]][position2[1]]
-        
+
         self.gs.swap(position1, position2)
 
-        candy1_swaped = self.gs[position1[0]][position1[1]]
-        candy2_swaped = self.gs[position2[0]][position2[1]]
+        candy1_swapped = self.gs[position1[0]][position1[1]]
+        candy2_swapped = self.gs[position2[0]][position2[1]]
 
-        self.assertEqual(candy1, candy2_swaped)
-        self.assertEqual(candy2, candy1_swaped)
+        self.assertTrue(isinstance(candy2_swapped, type(candy1)))
+        self.assertTrue(isinstance(candy1_swapped, type(candy2)))
 
     def test_simple_swap_not_adjacent(self):
         position1 = (0, 1)
@@ -43,11 +43,11 @@ class SwapTest(unittest.TestCase):
 
         self.gs.swap(position1, position2)
 
-        candy1_swaped = self.gs[position1[0]][position1[1]]
-        candy2_swaped = self.gs[position2[0]][position2[1]]
+        candy1_swapped = self.gs[position1[0]][position1[1]]
+        candy2_swapped = self.gs[position2[0]][position2[1]]
 
-        self.assertEqual(candy1, candy1_swaped)
-        self.assertEqual(candy2, candy2_swaped)
+        self.assertEqual(candy1, candy1_swapped)
+        self.assertEqual(candy2, candy2_swapped)
 
     def test_out_of_bounds(self):
         position1 = (0, 0)
