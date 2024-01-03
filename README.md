@@ -15,7 +15,7 @@ Also, some bugs might still be out there. Feel free to hunt them!
 
 To start the game just do:
 ```shell
-git clone https://github.com/Bornlex/cru.sh
+git clone https://github.com/Bornlex/cru.sh && cd cru.sh
 python3 main.py
 ```
 
