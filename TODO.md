@@ -5,4 +5,5 @@
 - [x] Check for more than 3 adjacent fruits
 - [ ] Create super fruits
 - [ ] Add a scoring system
-- [ ] Instead of printing multiple states one after the other, create an animation
+- [x] Instead of printing multiple states one after the other, create an animation
+- [ ] Fix bug that makes possible a state with no combination
