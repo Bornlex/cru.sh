@@ -1,4 +1,5 @@
 import copy
+import time
 import random
 from typing import Union
 
@@ -262,3 +263,5 @@ class GameState:
             self.destroy()
             if self.compare_states(previous_state, self.__columns):
                 break
+
+            time.sleep(.5)

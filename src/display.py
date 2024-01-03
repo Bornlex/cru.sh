@@ -1,3 +1,4 @@
+import os
 import sys
 
 from src import fruits
@@ -5,6 +6,13 @@ from src import fruits
 
 class Console:
     _separator = "--------\n"
+
+    @staticmethod
+    def clear():
+        if os.name == "nt":
+            os.system("cls")
+        else:
+            os.system("clear")
 
     @staticmethod
     def __fetch_game_state(gs):
@@ -27,8 +35,7 @@ class Console:
         for line in lines:
             content += " ".join(line) + "\n"
         content += self._separator
-        
-        sys.stdout.write("\r")
-        sys.stdout.flush()
+
+        self.clear()
         sys.stdout.write(content)
         sys.stdout.flush()
